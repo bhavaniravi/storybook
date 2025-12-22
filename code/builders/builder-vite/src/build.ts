@@ -63,6 +63,19 @@ export async function build(options: Options) {
 
     finalConfig.plugins = await withoutVitePlugins(finalConfig.plugins, [turbosnapPluginName]);
   }
+  console.log('Final Vite config:', finalConfig);
+  if (finalConfig.build?.watch) {
+    const watcher = await viteBuild(finalConfig);
+    watcher.on('event', (event) => {
+      if (event.code === 'BUNDLE_END') {
+        console.log(`Rebuilt in ${event.duration}ms`);
+      }
+
+      if (event.code === 'ERROR') {
+        console.error(event.error);
+      }
+    });
+  }
 
   await viteBuild(await sanitizeEnvVars(options, finalConfig));
 

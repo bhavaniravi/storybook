@@ -74,13 +74,9 @@ export async function commonConfig(
     // otherwise, add VITE_ and STORYBOOK_ so that vite doesn't lose its default.
     envPrefix: userConfig.envPrefix ? ['STORYBOOK_'] : ['VITE_', 'STORYBOOK_'],
     // Pass build.target option from user's vite config
-    build: {
-      target: buildProperty?.target,
-    },
+    build: buildProperty,
   };
-
   const config: ViteConfig = mergeConfig(userConfig, sbConfig);
-
   return config;
 }
 
